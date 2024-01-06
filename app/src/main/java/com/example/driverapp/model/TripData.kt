@@ -1,5 +1,6 @@
 package com.example.driverapp.model
 
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDateTime
 data class TripData(
     val trips: List<Trip>
@@ -10,7 +11,8 @@ data class Trip(
     val inSeries: Boolean,
     val passengers: List<Passenger>,
     val uuid: String,
-    val plannedRoute: PlannedRoute,
+    @SerializedName("planned_route")
+    val plannedRoute: PlannedRoute?,
     val wayPoints: List<Waypoint>
 )
 
@@ -21,6 +23,7 @@ data class Passenger(
 
 data class PlannedRoute(
     val id: Long,
+    @SerializedName("total_time")
     val totalTime: Double,
     val totalDistance: Long,
     val startsAt: LocalDateTime,

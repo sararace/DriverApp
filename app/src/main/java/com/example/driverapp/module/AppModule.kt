@@ -1,8 +1,7 @@
 package com.example.driverapp.module
 
 import com.example.driverapp.network.DriverAppApi
-import com.example.driverapp.repository.TripRepository
-import com.example.driverapp.repository.TripRepositoryImpl
+import com.example.driverapp.triplist.TripListViewModel
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import okhttp3.OkHttpClient
@@ -16,9 +15,9 @@ import java.time.ZonedDateTime
 val appModule = module {
     factory { provideHttpLoggingInterceptor() }
     factory { provideOkHttpClient(get()) }
-    factory { provideForecastApi(get()) }
+    factory { provideDriverAppApi(get()) }
     single { provideRetrofit(get()) }
-    single<TripRepository> { TripRepositoryImpl(get()) }
+    factory { TripListViewModel(get()) }
 }
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
@@ -46,7 +45,7 @@ fun provideOkHttpClient(
     return client.build()
 }
 
-fun provideForecastApi(retrofit: Retrofit): DriverAppApi =
+fun provideDriverAppApi(retrofit: Retrofit): DriverAppApi =
     retrofit.create(DriverAppApi::class.java)
 
 const val DEBUG = true
