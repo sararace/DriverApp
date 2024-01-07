@@ -31,9 +31,7 @@ class TripListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.tripData.collect { data ->
                 data?.let {
-                    val tripListAdapter =
-                        TripListAdapter(it.trips.map { trip -> trip.plannedRoute?.totalTime.toString() }
-                            .toTypedArray())
+                    val tripListAdapter = TripListAdapter(it.trips)
 
                     val recyclerView: RecyclerView = binding!!.tripList
                     recyclerView.adapter = tripListAdapter

@@ -10,7 +10,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 val appModule = module {
     factory { provideHttpLoggingInterceptor() }
@@ -24,7 +24,7 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     val gson = GsonBuilder().registerTypeAdapter(
             LocalDateTime::class.java,
             JsonDeserializer { json, _, _ ->
-                ZonedDateTime.parse(json.asJsonPrimitive.asString).toLocalDateTime()
+                LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ISO_DATE_TIME)
             } as JsonDeserializer<LocalDateTime?>
         ).create()
     return Retrofit.Builder().baseUrl("https://storage.googleapis.com/").client(okHttpClient)

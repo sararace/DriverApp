@@ -7,16 +7,20 @@ data class TripData(
 )
 
 data class Trip(
+    @SerializedName("estimated_earnings")
     val estimatedEarnings: Int,
+    @SerializedName("in_series")
     val inSeries: Boolean,
     val passengers: List<Passenger>,
     val uuid: String,
     @SerializedName("planned_route")
-    val plannedRoute: PlannedRoute?,
-    val wayPoints: List<Waypoint>
+    val plannedRoute: PlannedRoute,
+    @SerializedName("waypoints")
+    val waypoints: List<Waypoint>
 )
 
 data class Passenger(
+    @SerializedName("booster_seat")
     val boosterSeat: Boolean,
     val uuid: String
 )
@@ -25,9 +29,12 @@ data class PlannedRoute(
     val id: Long,
     @SerializedName("total_time")
     val totalTime: Double,
+    @SerializedName("total_distance")
     val totalDistance: Long,
-    val startsAt: LocalDateTime,
-    val endsAt: LocalDateTime
+    @SerializedName("starts_at")
+    val startsAt: LocalDateTime?,
+    @SerializedName("ends_at")
+    val endsAt: LocalDateTime?
 )
 
 data class Waypoint(
