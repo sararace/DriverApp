@@ -3,19 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textColor="@color/navy"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Thu 6/17 • " />
+        tools:text="Thu 6/17" />
 
     <TextView
         android:id="@+id/times"
@@ -23,10 +24,11 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/date"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="4:18a - 4:26p" />
+        tools:text="•  4:18a - 4:26p" />
 
     <TextView
         android:id="@+id/estimated_label"
@@ -42,7 +44,7 @@
         android:id="@+id/estimated_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/navy"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/estimated_label"

@@ -1,8 +1,15 @@
 package com.example.driverapp.triplist
 
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.SpannedString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.driverapp.R
 import com.example.driverapp.databinding.TripListHeaderItemBinding
 import com.example.driverapp.model.Trip
 import java.time.format.DateTimeFormatter
@@ -22,9 +29,17 @@ class TripListAdapter(private val dataSet: List<Trip>) : RecyclerView.Adapter<Tr
 
     class ViewHolder(private val itemBinding: TripListHeaderItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(tripItem: Trip) {
-            itemBinding.date.text = tripItem.plannedRoute.startsAt?.format(DateTimeFormatter.ISO_DATE)
-            itemBinding.times.text = tripItem.plannedRoute.startsAt?.format(DateTimeFormatter.ISO_TIME)
+            itemBinding.date.text = tripItem.plannedRoute.startsAt?.format(DateTimeFormatter.ofPattern("E M/d")) // future improvement: localization
+            itemBinding.times.text = formatTimeRange(tripItem)
             itemBinding.estimatedValue.text = "$${tripItem.estimatedEarnings.toDouble().div(100)}"
+        }
+
+        private fun formatTimeRange(tripItem: Trip) : SpannableString {
+            val start = tripItem.plannedRoute.startsAt?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
+            val end = tripItem.plannedRoute.endsAt?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
+            val spannable = SpannableString(itemView.resources.getString(R.string.time_range, start, end))
+            spannable.setSpan(StyleSpan(Typeface.BOLD), 2, start.length + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            return spannable
         }
     }
 }
