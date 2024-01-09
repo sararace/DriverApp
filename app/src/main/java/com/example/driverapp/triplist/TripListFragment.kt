@@ -31,39 +31,43 @@ class TripListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.tripData.collect { data ->
-                data?.let {
-                    val tripItems = mutableListOf<RecyclerViewItem>()
-                    for (trip in it.trips) {
-                        tripItems.add(
-                            HeaderItem(
-                                trip.plannedRoute.startsAt,
-                                trip.plannedRoute.endsAt,
-                                trip.estimatedEarnings
-                            )
+            viewModel.tripGroups.collect { groups ->
+                val tripItems = mutableListOf<RecyclerViewItem>()
+                for (group in groups) {
+                    tripItems.add(
+                        HeaderItem(
+                            group.date,
+                            group.startTime,
+                            group.endTime,
+                            group.estimatedEarnings
                         )
+                    )
+                    for (groupItem in group.tripList) {
                         tripItems.add(
                             TripItem(
-                                trip.plannedRoute.startsAt,
-                                trip.plannedRoute.endsAt,
-                                trip.estimatedEarnings,
-                                trip.passengers.size,
-                                trip.waypoints
+                                groupItem.startTime,
+                                groupItem.endTime,
+                                groupItem.estimatedEarnings,
+                                groupItem.riders,
+                                groupItem.boosters,
+                                groupItem.addresses
                             )
                         )
                     }
-                    val tripListAdapter = TripListAdapter(tripItems)
-
-                    val recyclerView: RecyclerView = binding!!.tripList
-                    recyclerView.adapter = tripListAdapter
-                    val layoutManager = LinearLayoutManager(requireContext())
-                    recyclerView.layoutManager = layoutManager
-                    val dividerItemDecoration = DividerItemDecoration(
-                        recyclerView.context,
-                        layoutManager.orientation
-                    )
-                    recyclerView.addItemDecoration(dividerItemDecoration)
                 }
+                val tripListAdapter = TripListAdapter(tripItems)
+
+                val recyclerView: RecyclerView = binding!!.tripList
+                recyclerView.adapter = tripListAdapter
+                val layoutManager = LinearLayoutManager(requireContext())
+                recyclerView.layoutManager = layoutManager
+                // future improvement: hardcode in the dividers to solve UI bug where dividers
+                // are in between card views within the same day
+                val dividerItemDecoration = DividerItemDecoration(
+                    recyclerView.context,
+                    layoutManager.orientation
+                )
+                recyclerView.addItemDecoration(dividerItemDecoration)
             }
         }
     }

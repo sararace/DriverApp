@@ -1,6 +1,5 @@
 package com.example.driverapp.triplist
 
-import android.content.res.Resources
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,10 +11,6 @@ import androidx.viewbinding.ViewBinding
 import com.example.driverapp.R
 import com.example.driverapp.databinding.TripListHeaderItemBinding
 import com.example.driverapp.databinding.TripListRowItemBinding
-import com.example.driverapp.model.Waypoint
-import java.lang.StringBuilder
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerView.Adapter<TripListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,20 +36,18 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
     class ViewHolder(private val itemBinding: ViewBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(tripItem: RecyclerViewItem) {
             if (itemBinding is TripListHeaderItemBinding) {
-                itemBinding.date.text = tripItem.startTime?.format(DateTimeFormatter.ofPattern("E M/d")) // future improvement: localization
-                itemBinding.times.text = formatTimeRange(tripItem)
+                itemBinding.date.text = (tripItem as HeaderItem).date
+                itemBinding.times.text = formatTimeRange(tripItem.startTime, tripItem.endTime)
                 itemBinding.estimatedValue.text = "$${tripItem.estimatedEarnings.toDouble().div(100)}"
             } else if (itemBinding is TripListRowItemBinding) {
-                itemBinding.times.text = formatTimeRange(tripItem)
+                itemBinding.times.text = formatTimeRange(tripItem.startTime, tripItem.endTime)
                 itemBinding.estimatedValue.text = "$${tripItem.estimatedEarnings.toDouble().div(100)}"
-                itemBinding.riderBoosterCount.text = formatRidersBoosters(tripItem as TripItem, itemView.resources)
-                itemBinding.addresses.text = formatAddresses(tripItem as TripItem)
+                itemBinding.riderBoosterCount.text = formatRidersBoosters(tripItem as TripItem)
+                itemBinding.addresses.text = tripItem.addresses
             }
         }
 
-        private fun formatTimeRange(tripItem: RecyclerViewItem): SpannableString {
-            val start = tripItem.startTime?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
-            val end = tripItem.endTime?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
+        private fun formatTimeRange(start: String, end: String): SpannableString {
             val spannable = SpannableString(itemView.resources.getString(R.string.time_range, start, end))
             spannable.setSpan(
                 StyleSpan(Typeface.BOLD),
@@ -65,44 +58,36 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
             return spannable
         }
 
-        private fun formatAddresses(tripItem: TripItem): String {
-            val addressesBuilder = StringBuilder()
-            tripItem.waypoints.forEachIndexed { i, waypoint ->
-                addressesBuilder.append("${i + 1}. ")
-                addressesBuilder.append(waypoint.location.streetAddress)
-                addressesBuilder.append(", ")
-                addressesBuilder.append(waypoint.location.city)
-                addressesBuilder.append(" ")
-                addressesBuilder.append((waypoint.location.zipcode))
-                if (i < tripItem.waypoints.size - 1) {
-                    addressesBuilder.append("\n")
-                }
+        private fun formatRidersBoosters(tripItem: TripItem): String {
+            val ridersString = itemView.resources.getQuantityString(R.plurals.riders, tripItem.riders, tripItem.riders)
+            val boostersString = itemView.resources.getQuantityString(R.plurals.boosters, tripItem.boosters, tripItem.boosters)
+            return if (tripItem.boosters > 0) {
+                "($ridersString • $boostersString)"
+            } else {
+                "($ridersString)"
             }
-            return addressesBuilder.toString()
-        }
-
-        private fun formatRidersBoosters(tripItem: TripItem, resources: Resources): String {
-            return resources.getQuantityString(R.plurals.riders, tripItem.riders, tripItem.riders)
         }
     }
 }
 
 open class RecyclerViewItem(
-    val startTime: LocalDateTime?,
-    val endTime: LocalDateTime?,
+    val startTime: String,
+    val endTime: String,
     val estimatedEarnings: Int
 )
 class HeaderItem(
-    startTime: LocalDateTime?,
-    endTime: LocalDateTime?,
+    val date: String,
+    startTime: String,
+    endTime: String,
     estimatedEarnings: Int
 ) : RecyclerViewItem(startTime, endTime, estimatedEarnings)
 class TripItem(
-    startTime: LocalDateTime?,
-    endTime: LocalDateTime?,
+    startTime: String,
+    endTime: String,
     estimatedEarnings: Int,
     val riders: Int,
-    val waypoints: List<Waypoint>
+    val boosters: Int,
+    val addresses: String
 ) : RecyclerViewItem(startTime, endTime, estimatedEarnings)
 
 const val VIEW_TYPE_HEADER = 1

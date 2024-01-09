@@ -2,10 +2,13 @@
     <string name="app_name">DriverApp</string>
     <string name="estimated">ESTIMATED</string>
     <string name="estimated_abbreviated">est.</string>
-    <string name="bullet_point">•</string>
     <string name="time_range">%1$s - %2$s</string>
     <plurals name="riders">
-        <item quantity="one">(%1$s rider)</item>
-        <item quantity="other">(%1$s riders)</item>
+        <item quantity="one">%1$s rider</item>
+        <item quantity="other">%1$s riders</item>
+    </plurals>
+    <plurals name="boosters">
+        <item quantity="one">%1$s booster</item>
+        <item quantity="other">%1$s boosters</item>
     </plurals>
 </resources>
