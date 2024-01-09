@@ -13,7 +13,6 @@ import com.example.driverapp.databinding.FragmentTripListBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class TripListFragment : Fragment() {
     private val viewModel: TripListViewModel by viewModel()
 
