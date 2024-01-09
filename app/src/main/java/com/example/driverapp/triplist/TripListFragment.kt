@@ -47,6 +47,7 @@ class TripListFragment : Fragment() {
                                 trip.plannedRoute.startsAt,
                                 trip.plannedRoute.endsAt,
                                 trip.estimatedEarnings,
+                                trip.passengers.size,
                                 trip.waypoints
                             )
                         )

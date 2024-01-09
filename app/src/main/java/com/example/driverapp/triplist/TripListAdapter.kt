@@ -1,5 +1,6 @@
 package com.example.driverapp.triplist
 
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
@@ -46,6 +47,7 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
             } else if (itemBinding is TripListRowItemBinding) {
                 itemBinding.times.text = formatTimeRange(tripItem)
                 itemBinding.estimatedValue.text = "$${tripItem.estimatedEarnings.toDouble().div(100)}"
+                itemBinding.riderBoosterCount.text = formatRidersBoosters(tripItem as TripItem, itemView.resources)
                 itemBinding.addresses.text = formatAddresses(tripItem as TripItem)
             }
         }
@@ -78,6 +80,10 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
             }
             return addressesBuilder.toString()
         }
+
+        private fun formatRidersBoosters(tripItem: TripItem, resources: Resources): String {
+            return resources.getQuantityString(R.plurals.riders, tripItem.riders, tripItem.riders)
+        }
     }
 }
 
@@ -95,6 +101,7 @@ class TripItem(
     startTime: LocalDateTime?,
     endTime: LocalDateTime?,
     estimatedEarnings: Int,
+    val riders: Int,
     val waypoints: List<Waypoint>
 ) : RecyclerViewItem(startTime, endTime, estimatedEarnings)
 
