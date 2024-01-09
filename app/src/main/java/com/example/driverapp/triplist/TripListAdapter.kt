@@ -44,6 +44,7 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
                 itemBinding.estimatedValue.text = "$${tripItem.estimatedEarnings.toDouble().div(100)}"
                 itemBinding.riderBoosterCount.text = formatRidersBoosters(tripItem as TripItem)
                 itemBinding.addresses.text = tripItem.addresses
+                itemView.setOnClickListener { tripItem.onClick(tripItem.tripId) }
             }
         }
 
@@ -87,7 +88,9 @@ class TripItem(
     estimatedEarnings: Int,
     val riders: Int,
     val boosters: Int,
-    val addresses: String
+    val addresses: String,
+    val tripId: String,
+    val onClick: (String) -> Unit
 ) : RecyclerViewItem(startTime, endTime, estimatedEarnings)
 
 const val VIEW_TYPE_HEADER = 1

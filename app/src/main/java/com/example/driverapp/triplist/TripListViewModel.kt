@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.driverapp.model.TripData
 import com.example.driverapp.model.Waypoint
-import com.example.driverapp.network.DriverAppApi
+import com.example.driverapp.repository.TripDataRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TripListViewModel(
-    driverAppService: DriverAppApi,
+    repository: TripDataRepository,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
@@ -21,9 +21,9 @@ class TripListViewModel(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            val response = driverAppService.getTripData()
-            if (response.isSuccessful) {
-                tripGroups.emit(getTripGroups(response.body()))
+            repository.fetchTripData()
+            repository.tripData.collect {
+                tripGroups.emit(getTripGroups(it))
             }
         }
     }
@@ -39,7 +39,8 @@ class TripListViewModel(
                 trip.estimatedEarnings,
                 trip.passengers.size,
                 trip.passengers.count { it.boosterSeat },
-                formatAddresses(trip.waypoints)
+                formatAddresses(trip.waypoints),
+                trip.uuid
             )
             if (tripGroupList.any { it.date == date }) {
                 // add to existing group list
@@ -103,5 +104,6 @@ data class TripGroupItem(
     val estimatedEarnings: Int,
     val riders: Int,
     val boosters: Int,
-    val addresses: String
+    val addresses: String,
+    val tripId: String
 )

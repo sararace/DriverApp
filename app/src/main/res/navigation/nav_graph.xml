@@ -7,6 +7,19 @@
     <fragment
         android:id="@+id/tripList"
         android:name="com.example.driverapp.triplist.TripListFragment"
-        android:label="Trip List" />
+        android:label="My Rides">
+        <action
+            android:id="@+id/action_triplist_to_tripdetail"
+            app:destination="@id/tripDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripDetail"
+        android:name="com.example.driverapp.tripdetail.TripDetailFragment"
+        android:label="Ride Detail">
+        <argument
+            android:name="tripId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

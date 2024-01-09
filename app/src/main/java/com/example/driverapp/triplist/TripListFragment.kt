@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +50,9 @@ class TripListFragment : Fragment() {
                                 groupItem.estimatedEarnings,
                                 groupItem.riders,
                                 groupItem.boosters,
-                                groupItem.addresses
+                                groupItem.addresses,
+                                groupItem.tripId,
+                                ::navigateToTripDetail
                             )
                         )
                     }
@@ -69,6 +72,11 @@ class TripListFragment : Fragment() {
                 recyclerView.addItemDecoration(dividerItemDecoration)
             }
         }
+    }
+
+    private fun navigateToTripDetail(tripId: String) {
+        val action = TripListFragmentDirections.actionTriplistToTripdetail(tripId)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

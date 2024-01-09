@@ -1,6 +1,9 @@
 package com.example.driverapp.module
 
 import com.example.driverapp.network.DriverAppApi
+import com.example.driverapp.repository.TripDataRepository
+import com.example.driverapp.repository.TripDataRepositoryImpl
+import com.example.driverapp.tripdetail.TripDetailViewModel
 import com.example.driverapp.triplist.TripListViewModel
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
@@ -17,16 +20,18 @@ val appModule = module {
     factory { provideOkHttpClient(get()) }
     factory { provideDriverAppApi(get()) }
     single { provideRetrofit(get()) }
+    single<TripDataRepository> { TripDataRepositoryImpl(get()) }
     factory { TripListViewModel(get()) }
+    factory { TripDetailViewModel(get()) }
 }
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     val gson = GsonBuilder().registerTypeAdapter(
-            LocalDateTime::class.java,
-            JsonDeserializer { json, _, _ ->
-                LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ISO_DATE_TIME)
-            } as JsonDeserializer<LocalDateTime?>
-        ).create()
+        LocalDateTime::class.java,
+        JsonDeserializer { json, _, _ ->
+            LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ISO_DATE_TIME)
+        } as JsonDeserializer<LocalDateTime?>
+    ).create()
     return Retrofit.Builder().baseUrl("https://storage.googleapis.com/").client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson)).build()
 }
