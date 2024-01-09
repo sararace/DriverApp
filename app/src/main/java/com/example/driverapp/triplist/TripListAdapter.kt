@@ -67,7 +67,11 @@ class TripListAdapter(private val dataSet: List<RecyclerViewItem>) : RecyclerVie
             val addressesBuilder = StringBuilder()
             tripItem.waypoints.forEachIndexed { i, waypoint ->
                 addressesBuilder.append("${i + 1}. ")
-                addressesBuilder.append(waypoint.location.address)
+                addressesBuilder.append(waypoint.location.streetAddress)
+                addressesBuilder.append(", ")
+                addressesBuilder.append(waypoint.location.city)
+                addressesBuilder.append(" ")
+                addressesBuilder.append((waypoint.location.zipcode))
                 if (i < tripItem.waypoints.size - 1) {
                     addressesBuilder.append("\n")
                 }
