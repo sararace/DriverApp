@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DriverApp</string>
     <string name="estimated">ESTIMATED</string>
-    <string name="time_range">•\u00A0\u00A0%1$s - %2$s</string>
+    <string name="estimated_abbreviated">est.</string>
+    <string name="bullet_point">•</string>
+    <string name="time_range">%1$s - %2$s</string>
 </resources>
