@@ -1,6 +1,10 @@
 package com.example.driverapp.ridedetails
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import com.example.driverapp.R
+import com.example.driverapp.model.Waypoint
 import com.example.driverapp.repository.TripDataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -22,6 +26,7 @@ class RideDetailsViewModel(
                 formatTime(trip.plannedRoute.endsAt),
                 trip.estimatedEarnings,
                 trip.inSeries,
+                getWaypoints(trip.waypoints),
                 trip.uuid,
                 metersToMiles(trip.plannedRoute.totalDistance),
                 trip.plannedRoute.totalTime
@@ -35,6 +40,22 @@ class RideDetailsViewModel(
 
     private fun formatTime(localDateTime: LocalDateTime?): String {
         return localDateTime?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
+    }
+
+    private fun getWaypoints(waypoints: List<Waypoint>): List<WaypointUiState> {
+        val uiStateList = mutableListOf<WaypointUiState>()
+        waypoints.forEachIndexed { index, waypoint ->
+            val address = waypoint.location.streetAddress
+            val city = waypoint.location.city
+            val state = waypoint.location.state
+            uiStateList.add(
+                WaypointUiState(
+                    if (index < waypoints.size - 1) WAYPOINT_TYPE.PICKUP else WAYPOINT_TYPE.DROP_OFF,
+                    "$address, $city, $state"
+                )
+            )
+        }
+        return uiStateList
     }
 
     private fun metersToMiles(distanceInMeters: Long): Double {
@@ -52,7 +73,23 @@ data class RideDetailsUiState(
     val endTime: String,
     val estimatedEarnings: Int,
     val series: Boolean,
+    val waypoints: List<WaypointUiState>,
     val tripId: String,
     val distance: Double,
     val totalTime: Double
 )
+
+data class WaypointUiState(
+    val type: WAYPOINT_TYPE,
+    val address: String
+)
+
+enum class WAYPOINT_TYPE(
+    @StringRes
+    val title: Int,
+    @DrawableRes
+    val icon: Int
+) {
+    PICKUP(R.string.pickup_title, R.drawable.anchor_icon),
+    DROP_OFF(R.string.drop_off_title, R.drawable.non_anchor_icon)
+}

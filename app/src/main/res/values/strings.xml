@@ -7,6 +7,8 @@
     <string name="ride_details_title">Ride Details</string>
     <string name="cancel_trip">Cancel This Trip</string>
     <string name="series">This trip is part of a series.</string>
+    <string name="pickup_title">Pickup</string>
+    <string name="drop_off_title">Drop-off</string>
     <string name="trip_id">Trip ID: %1$s</string>
     <string name="minutes">%1$f min</string>
     <string name="miles">%1$f mi</string>
