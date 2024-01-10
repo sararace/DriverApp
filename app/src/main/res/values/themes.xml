@@ -5,5 +5,11 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.DriverApp" parent="Base.Theme.DriverApp" />
+    <style name="Theme.DriverApp" parent="Base.Theme.DriverApp">
+        <item name="drawerArrowStyle">@style/DrawerArrowToggleStyle</item>
+    </style>
+
+    <style name="DrawerArrowToggleStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
 </resources>
