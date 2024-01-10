@@ -50,7 +50,7 @@ class RideDetailsViewModel(
             val state = waypoint.location.state
             uiStateList.add(
                 WaypointUiState(
-                    if (index < waypoints.size - 1) WAYPOINT_TYPE.PICKUP else WAYPOINT_TYPE.DROP_OFF,
+                    if (index < waypoints.size - 1) WaypointType.PICKUP else WaypointType.DROP_OFF,
                     "$address, $city, $state"
                 )
             )
@@ -80,11 +80,11 @@ data class RideDetailsUiState(
 )
 
 data class WaypointUiState(
-    val type: WAYPOINT_TYPE,
+    val type: WaypointType,
     val address: String
 )
 
-enum class WAYPOINT_TYPE(
+enum class WaypointType(
     @StringRes
     val title: Int,
     @DrawableRes
