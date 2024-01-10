@@ -44,6 +44,8 @@ class RideDetailsFragment : Fragment() {
                 binding?.date?.text = uiState?.date
                 binding?.times?.text = formatTimeRange(uiState?.startTime, uiState?.endTime)
                 binding?.estimatedValue?.text = "$${uiState?.estimatedEarnings?.toDouble()?.div(100)}"
+                binding?.series?.visibility = if (uiState?.series == true) View.VISIBLE else View.GONE
+                binding?.tripInfo?.text = formatTripInfo(uiState)
             }
         }
     }
@@ -57,5 +59,12 @@ class RideDetailsFragment : Fragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         return spannable
+    }
+
+    private fun formatTripInfo(uiState: RideDetailsUiState?): String {
+        val tripId = resources.getString(R.string.trip_id, uiState?.tripId)
+        val miles = resources.getString(R.string.miles, uiState?.distance)
+        val minutes = resources.getString(R.string.minutes, uiState?.totalTime)
+        return "$tripId • $miles • $minutes"
     }
 }

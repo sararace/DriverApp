@@ -19,7 +19,11 @@ class RideDetailsViewModel(
                 formatDate(trip.plannedRoute.startsAt),
                 formatTime(trip.plannedRoute.startsAt),
                 formatTime(trip.plannedRoute.endsAt),
-                trip.estimatedEarnings
+                trip.estimatedEarnings,
+                trip.inSeries,
+                trip.uuid,
+                metersToMiles(trip.plannedRoute.totalDistance),
+                trip.plannedRoute.totalTime
             )
         }?.first()
     }
@@ -31,11 +35,23 @@ class RideDetailsViewModel(
     private fun formatTime(localDateTime: LocalDateTime?): String {
         return localDateTime?.format(DateTimeFormatter.ofPattern("h:mma")) ?: ""
     }
+
+    private fun metersToMiles(distanceInMeters: Long): Double {
+        return distanceInMeters * METERS_TO_MILES
+    }
+
+    companion object {
+        const val METERS_TO_MILES = 0.000621371
+    }
 }
 
 data class RideDetailsUiState(
     val date: String,
     val startTime: String,
-    var endTime: String,
-    var estimatedEarnings: Int
+    val endTime: String,
+    val estimatedEarnings: Int,
+    val series: Boolean,
+    val tripId: String,
+    val distance: Double,
+    val totalTime: Double
 )
