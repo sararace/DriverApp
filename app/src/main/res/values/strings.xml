@@ -5,6 +5,7 @@
     <string name="time_range">%1$s - %2$s</string>
     <string name="my_rides_title">My Rides</string>
     <string name="ride_details_title">Ride Details</string>
+    <string name="cancel_trip">Cancel This Trip</string>
     <plurals name="riders">
         <item quantity="one">%1$s rider</item>
         <item quantity="other">%1$s riders</item>
