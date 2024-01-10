@@ -3,7 +3,7 @@ package com.example.driverapp.module
 import com.example.driverapp.network.DriverAppApi
 import com.example.driverapp.repository.TripDataRepository
 import com.example.driverapp.repository.TripDataRepositoryImpl
-import com.example.driverapp.tripdetail.TripDetailViewModel
+import com.example.driverapp.ridedetails.RideDetailsViewModel
 import com.example.driverapp.triplist.TripListViewModel
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
@@ -22,7 +22,7 @@ val appModule = module {
     single { provideRetrofit(get()) }
     single<TripDataRepository> { TripDataRepositoryImpl(get()) }
     factory { TripListViewModel(get()) }
-    factory { TripDetailViewModel(get()) }
+    factory { RideDetailsViewModel(get()) }
 }
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {

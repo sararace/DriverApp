@@ -52,7 +52,7 @@ class TripListFragment : Fragment() {
                                 groupItem.boosters,
                                 groupItem.addresses,
                                 groupItem.tripId,
-                                ::navigateToTripDetail
+                                ::navigateToRideDetails
                             )
                         )
                     }
@@ -74,8 +74,8 @@ class TripListFragment : Fragment() {
         }
     }
 
-    private fun navigateToTripDetail(tripId: String) {
-        val action = TripListFragmentDirections.actionTriplistToTripdetail(tripId)
+    private fun navigateToRideDetails(tripId: String) {
+        val action = TripListFragmentDirections.actionTripListToRideDetails(tripId)
         findNavController().navigate(action)
     }
 

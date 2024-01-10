@@ -7,16 +7,16 @@
     <fragment
         android:id="@+id/tripList"
         android:name="com.example.driverapp.triplist.TripListFragment"
-        android:label="My Rides">
+        android:label="@string/my_rides_title">
         <action
-            android:id="@+id/action_triplist_to_tripdetail"
-            app:destination="@id/tripDetail" />
+            android:id="@+id/action_trip_list_to_ride_details"
+            app:destination="@id/rideDetails" />
     </fragment>
 
     <fragment
-        android:id="@+id/tripDetail"
-        android:name="com.example.driverapp.tripdetail.TripDetailFragment"
-        android:label="Ride Detail">
+        android:id="@+id/rideDetails"
+        android:name="com.example.driverapp.ridedetails.RideDetailsFragment"
+        android:label="@string/ride_details_title">
         <argument
             android:name="tripId"
             app:argType="string" />
