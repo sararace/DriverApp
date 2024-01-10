@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 class RideDetailsViewModel(
     repository: TripDataRepository
@@ -37,7 +38,7 @@ class RideDetailsViewModel(
     }
 
     private fun metersToMiles(distanceInMeters: Long): Double {
-        return distanceInMeters * METERS_TO_MILES
+        return (distanceInMeters * METERS_TO_MILES * 10).roundToInt() / 10.0
     }
 
     companion object {
