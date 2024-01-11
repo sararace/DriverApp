@@ -46,7 +46,7 @@ data class Location(
     val id: Long,
     val address: String,
     val lat: Double,
-    val long: Double,
+    val lng: Double,
     @SerializedName("street_address")
     val streetAddress: String,
     @SerializedName("street_name")

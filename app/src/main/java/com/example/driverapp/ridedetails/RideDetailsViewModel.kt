@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.driverapp.R
 import com.example.driverapp.model.Waypoint
 import com.example.driverapp.repository.TripDataRepository
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import java.time.LocalDateTime
@@ -31,6 +32,15 @@ class RideDetailsViewModel(
                 metersToMiles(trip.plannedRoute.totalDistance),
                 trip.plannedRoute.totalTime
             )
+        }?.first()
+    }
+
+    val waypointsFlow = repository.tripData.combine(tripIdFlow) { tripData, tripId ->
+        tripData?.trips?.filter { trip -> trip.uuid == tripId }?.map { trip ->
+            val waypoints = mutableListOf<LatLng>()
+            waypoints.add(LatLng(trip.waypoints.first().location.lat, trip.waypoints.first().location.lng))
+            waypoints.add(LatLng(trip.waypoints.last().location.lat, trip.waypoints.last().location.lng))
+            waypoints
         }?.first()
     }
 

@@ -18,15 +18,20 @@ import com.example.driverapp.R
 import com.example.driverapp.databinding.FragmentRideDetailsBinding
 import com.example.driverapp.databinding.RideDetailsWaypointBinding
 import com.example.driverapp.view.ConfirmationAlert
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RideDetailsFragment : Fragment() {
+class RideDetailsFragment : Fragment(), OnMapReadyCallback {
     private val viewModel: RideDetailsViewModel by viewModel()
-
     private var binding: FragmentRideDetailsBinding? = null
-
-    val args: RideDetailsFragmentArgs by navArgs()
+    private val args: RideDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +45,8 @@ class RideDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.toolbar?.setupWithNavController(findNavController())
+        binding?.map?.onCreate(savedInstanceState)
+        binding?.map?.getMapAsync(this)
         binding?.cancelTripButton?.setOnClickListener {
             val dialog = ConfirmationAlert.Builder(requireContext())
                 .setTitle(R.string.confirmation_alert_title)
@@ -109,5 +116,50 @@ class RideDetailsFragment : Fragment() {
         val miles = resources.getString(R.string.miles, uiState?.distance)
         val minutes = resources.getString(R.string.minutes, uiState?.totalTime)
         return "$tripId • $miles • $minutes"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding?.map?.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding?.map?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding?.map?.onStop()
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.waypointsFlow.collect { waypoints ->
+                if (waypoints != null) {
+                    val latlngBoundsBuilder = LatLngBounds.Builder()
+                    for (waypoint in waypoints) {
+                        map.addMarker(MarkerOptions().position(waypoint))
+                        latlngBoundsBuilder.include(waypoint)
+                    }
+                    map.moveCamera(CameraUpdateFactory.newLatLngBounds(latlngBoundsBuilder.build(), 150))
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        binding?.map?.onPause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        binding?.map?.onDestroy()
+        super.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding?.map?.onLowMemory()
     }
 }
