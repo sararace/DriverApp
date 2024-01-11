@@ -10,8 +10,6 @@ This app displays a list of rides for a given day, as well as the details for ea
 The [APK](https://github.com/sararace/DriverApp/blob/main/app-debug.apk) is in the root directory of the repository.
 
 ## Notes and Improvements
-I did not have enough time to complete the map section of the coding challenge.
-### Further improvements
 * There are many instances throughout the app of duplicated code, especially in formatting dates and times. I would create a util class to consolidate the logic.
 * Both unit tests and UI tests are missing from the app. I did add in a way to mock the CoroutineDispatcher though.
 * Currently the onClick() callback is called in addition to dismiss() in the confirmation alert. For further customizability, there should be an option of whether the dialog is dismissed or not.
@@ -22,3 +20,4 @@ There were several bugs that I noted, but prioritized other functionality instea
 * There are too many dividers in the My Rides list
 * The riders/boosters text overlaps with the estimated price on smaller screens. I would need to clarify with a designer what the intended wrapping behavior would be.
 * The toolbar text is not centered, although the left-aligned text is more in line with android best practices.
+* The map markers are not customized.
