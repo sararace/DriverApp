@@ -12,6 +12,10 @@
     <string name="trip_id">Trip ID: %1$s</string>
     <string name="minutes">%1$f min</string>
     <string name="miles">%1$f mi</string>
+    <string name="confirmation_alert_title">Are you sure?</string>
+    <string name="confirmation_alert_subtitle">Are you sure you want to cancel this claim? This action cannot be undone.</string>
+    <string name="nevermind">Nevermind</string>
+    <string name="yes">Yes</string>
     <plurals name="riders">
         <item quantity="one">%1$s rider</item>
         <item quantity="other">%1$s riders</item>

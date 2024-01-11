@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.driverapp.R
 import com.example.driverapp.databinding.FragmentRideDetailsBinding
 import com.example.driverapp.databinding.RideDetailsWaypointBinding
+import com.example.driverapp.view.ConfirmationAlert
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,6 +40,25 @@ class RideDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.toolbar?.setupWithNavController(findNavController())
+        binding?.cancelTripButton?.setOnClickListener {
+            val dialog = ConfirmationAlert.Builder(requireContext())
+                .setTitle(R.string.confirmation_alert_title)
+                .setSubtitle(R.string.confirmation_alert_subtitle)
+                .addButton(
+                    ConfirmationAlert.AlertButton(
+                        getString(R.string.nevermind),
+                        ConfirmationAlert.ButtonType.PRIMARY
+                    )
+                )
+                .addButton(
+                    ConfirmationAlert.AlertButton(
+                        getString(R.string.yes),
+                        ConfirmationAlert.ButtonType.SECONDARY
+                    )
+                )
+                .create()
+            dialog.show()
+        }
         viewModel.tripIdFlow.value = args.tripId
 
         viewLifecycleOwner.lifecycleScope.launch {
